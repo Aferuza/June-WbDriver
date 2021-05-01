@@ -1,0 +1,46 @@
+package seleniumW;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import java.util.IdentityHashMap;
+import java.util.List;
+import java.util.Set;
+
+import static java.lang.Thread.sleep;
+
+public class easyWbDr {
+    @Test
+    public void search() throws InterruptedException {
+
+        System.setProperty("webdriver.gecko.driver", "src/test/resources/geckodriver.exe");
+        WebDriver driver = new FirefoxDriver();
+        String queryStr = "Automation";
+        driver.get("https://www.google.com/");
+        WebElement inputTextField = driver.findElement(By.cssSelector(".gLFyf"));
+        inputTextField.sendKeys(queryStr);
+        inputTextField.submit();
+        //sleep
+        try {
+            sleep(5000);
+        } catch (InterruptedException e){
+            e.printStackTrace();
+        }
+
+        WebElement resultStatsElem = driver.findElement(By.id("result-stats"));
+        //extract text from the element
+        String resultStatText = resultStatsElem.getText();
+        //split string into pieces ans spaceis separator, convert to string array
+        String [] stringArray = resultStatText.split(" ");
+        String numbOfResults = stringArray[1];
+        //replace comas by blank space
+        String numbOfResFixed = numbOfResults.replace(",", "");
+        //convert string to int
+        int numofResParsed = Integer.parseInt(numbOfResFixed);
+        Assert.assertTrue(numofResParsed>100);
+        driver.quit();
+    }}
